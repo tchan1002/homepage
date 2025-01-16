@@ -22,9 +22,9 @@ class EntriesController < ApplicationController
     the_entry.title = params.fetch("query_title")
     the_entry.body = params.fetch("query_body")
 
-    ask = "Given sample titles like 'On Time', 'On Idea-Generation', and 'On AI and Writing', give me a concise title for the following text. Include only the title in your response, no punctuation or padding: " + params.fetch("query_body")
+    ask = "Given sample titles like 'On Time', 'On Idea-Generation', and 'On AI and Writing', give me a concise less than 3 word title for the following text. Include only the title in your response, no punctuation or padding: " + params.fetch("query_body")
   
-    ask2 = params.fetch("query_body")
+    ask2 = "Proof the following only for grammatical errors, do not use any different word choice." + params.fetch("query_body")
 
     client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_KEY"))
 
@@ -32,7 +32,7 @@ class EntriesController < ApplicationController
       parameters: {
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "You help rewrite journal entries to turn them from fragments into complete passages" },
+          { role: "system", content: "You help rewrite journal entries to turn them from fragments into complete passages." },
           { role: "user", content: ask }
         ],
       }
@@ -45,7 +45,7 @@ class EntriesController < ApplicationController
       parameters: {
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "You help rewrite journal entries to turn them from fragments into complete passages. You are however very keen on preserving the voice and idiosyncracies of any text you come across." },
+          { role: "system", content: "You help rewrite journal entries to turn them from fragments into complete passages." },
           { role: "user", content: ask2 }
         ],
       }
